@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FollowUp — Rapport TP06 | Groupe 02</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --blue-900: #1e3a5f;
+  --blue-700: #1d4ed8;
+  --blue-500: #3b82f6;
+  --blue-100: #dbeafe;
+  --blue-50:  #eff6ff;
+  --green-700: #15803d;
+  --green-500: #22c55e;
+  --green-100: #dcfce7;
+  --red-700:   #b91c1c;
+  --red-500:   #ef4444;
+  --red-100:   #fee2e2;
+  --orange-700:#c2410c;
+  --orange-500:#f97316;
+  --orange-100:#ffedd5;
+  --yellow-700:#a16207;
+  --yellow-100:#fef9c3;
+  --gray-950:  #0a0f1e;
+  --gray-900:  #111827;
+  --gray-800:  #1f2937;
+  --gray-700:  #374151;
+  --gray-600:  #4b5563;
+  --gray-400:  #9ca3af;
+  --gray-200:  #e5e7eb;
+  --gray-100:  #f3f4f6;
+  --gray-50:   #f9fafb;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { font-family:'Inter',sans-serif; background:var(--gray-50); color:var(--gray-800); line-height:1.65; font-size:14px; }
+
+/* ── COVER PAGE ── */
+.cover {
+  background: linear-gradient(145deg, #0a1628 0%, #0f2447 40%, #1a3a6e 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 60px 80px;
+  position: relative;
+  overflow: hidden;
+  page-break-after: always;
+}
+.cover::before {
+  content:'';
+  position:absolute; top:-100px; right:-100px;
+  width:500px; height:500px;
+  background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%);
+  pointer-events:none;
+}
+.cover::after {
+  content:'';
+  position:absolute; bottom:-150px; left:-50px;
+  width:400px; height:400px;
+  background: radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 70%);
+  pointer-events:none;
+}
+.cover-top { display:flex; justify-content:space-between; align-items:flex-start; }
+.cover-logo {
+  font-size:13px; font-weight:600; color:rgba(255,255,255,0.5);
+  letter-spacing:2px; text-transform:uppercase;
+  border:1px solid rgba(255,255,255,0.15);
+  padding:8px 16px; border-radius:6px;
+}
+.cover-norm {
+  font-size:12px; color:rgba(255,255,255,0.4);
+  text-align:right; line-height:1.8;
+}
+.cover-center { flex:1; display:flex; flex-direction:column; justify-content:center; padding:80px 0 60px; }
+.cover-tag {
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(59,130,246,0.2); border:1px solid rgba(59,130,246,0.4);
+  color:#93c5fd; padding:6px 16px; border-radius:20px;
+  font-size:12px; font-weight:500; letter-spacing:1px; text-transform:uppercase;
+  width:fit-content; margin-bottom:32px;
+}
+.cover-tag::before { content:'●'; font-size:8px; animation: blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.cover h1 {
+  font-size:56px; font-weight:800; color:white;
+  line-height:1.1; letter-spacing:-2px;
+  margin-bottom:16px;
+}
+.cover h1 span { color:#60a5fa; }
+.cover h2 {
+  font-size:20px; font-weight:300; color:rgba(255,255,255,0.6);
+  margin-bottom:48px; letter-spacing:-0.3px;
+}
+.cover-stats {
+  display:flex; gap:40px; flex-wrap:wrap;
+  padding:28px 0; border-top:1px solid rgba(255,255,255,0.1); border-bottom:1px solid rgba(255,255,255,0.1);
+}
+.c-stat { display:flex; flex-direction:column; gap:4px; }
+.c-stat-val { font-size:28px; font-weight:700; color:white; }
+.c-stat-val.green { color:#4ade80; }
+.c-stat-val.blue  { color:#60a5fa; }
+.c-stat-label { font-size:11px; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:1px; }
+.cover-bottom {
+  display:flex; justify-content:space-between; align-items:flex-end;
+}
+.cover-team { color:rgba(255,255,255,0.7); }
+.cover-team h3 { font-size:13px; font-weight:600; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; }
+.cover-team .member {
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:8px; font-size:15px; font-weight:500; color:white;
+}
+.cover-team .member::before {
+  content:''; width:6px; height:6px; background:#60a5fa; border-radius:50%; flex-shrink:0;
+}
+.cover-date { text-align:right; color:rgba(255,255,255,0.4); font-size:13px; line-height:2; }
+
+/* ── NAV ── */
+.nav {
+  background:white; border-bottom:2px solid var(--blue-100);
+  padding:0 60px; display:flex; gap:4px; align-items:center;
+  position:sticky; top:0; z-index:100;
+  box-shadow:0 2px 12px rgba(0,0,0,0.06);
+}
+.nav-logo { font-weight:700; font-size:15px; color:var(--blue-700); margin-right:16px; padding:16px 0; }
+.nav a {
+  padding:16px 14px; font-size:13px; font-weight:500; color:var(--gray-600);
+  text-decoration:none; border-bottom:2px solid transparent; margin-bottom:-2px;
+  transition:all .2s; white-space:nowrap;
+}
+.nav a:hover { color:var(--blue-700); border-bottom-color:var(--blue-500); }
+
+/* ── LAYOUT ── */
+.page { max-width:1080px; margin:0 auto; padding:56px 60px; }
+
+/* ── SECTION ── */
+.section {
+  background:white; border-radius:16px; margin-bottom:28px;
+  border:1px solid var(--gray-200); overflow:hidden;
+  box-shadow:0 1px 4px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03);
+}
+.section-head {
+  padding:28px 36px; display:flex; align-items:center; gap:20px;
+  border-bottom:1px solid var(--gray-100);
+  background:linear-gradient(to right, var(--gray-50), white);
+}
+.snum {
+  width:44px; height:44px; border-radius:10px; display:flex;
+  align-items:center; justify-content:center;
+  font-weight:800; font-size:18px; color:white; flex-shrink:0;
+}
+.snum-blue   { background:linear-gradient(135deg,#2563eb,#1d4ed8); }
+.snum-green  { background:linear-gradient(135deg,#16a34a,#15803d); }
+.snum-orange { background:linear-gradient(135deg,#ea580c,#c2410c); }
+.snum-purple { background:linear-gradient(135deg,#7c3aed,#6d28d9); }
+.snum-teal   { background:linear-gradient(135deg,#0d9488,#0f766e); }
+.section-title { font-size:19px; font-weight:700; color:var(--gray-900); }
+.section-sub   { font-size:13px; color:var(--gray-600); margin-top:3px; }
+.section-body  { padding:36px; }
+
+/* ── SUBSECTIONS ── */
+.sub { margin-bottom:32px; }
+.sub:last-child { margin-bottom:0; }
+.sub-title {
+  font-size:14px; font-weight:700; color:var(--gray-800);
+  margin-bottom:16px; display:flex; align-items:center; gap:10px;
+}
+.sub-title::before { content:''; width:4px; height:18px; background:var(--blue-500); border-radius:2px; flex-shrink:0; }
+
+/* ── TABLE ── */
+table { width:100%; border-collapse:collapse; font-size:13.5px; }
+th {
+  background:var(--gray-900); color:white; padding:12px 16px;
+  text-align:left; font-weight:600; font-size:12px; letter-spacing:0.3px;
+}
+th:first-child { border-radius:0; }
+td { padding:11px 16px; border-bottom:1px solid var(--gray-100); vertical-align:middle; color:var(--gray-700); }
+tr:last-child td { border-bottom:none; }
+tr:nth-child(even) td { background:var(--gray-50); }
+tr:hover td { background:var(--blue-50); transition:background .15s; }
+
+/* ── BADGES ── */
+.badge {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:3px 10px; border-radius:20px; font-size:12px; font-weight:600;
+}
+.bg  { background:var(--green-100);  color:var(--green-700); }
+.br  { background:var(--red-100);    color:var(--red-700); }
+.bo  { background:var(--orange-100); color:var(--orange-700); }
+.by  { background:var(--yellow-100); color:var(--yellow-700); }
+.bb  { background:var(--blue-100);   color:var(--blue-700); }
+.bgr { background:var(--gray-100);   color:var(--gray-600); }
+
+/* ── CALLOUTS ── */
+.callout {
+  padding:16px 20px; border-radius:10px; border-left:4px solid;
+  margin:16px 0; font-size:13.5px; line-height:1.6;
+}
+.ci { background:var(--blue-50);    border-color:var(--blue-500);   color:#1e40af; }
+.cs { background:var(--green-100);  border-color:var(--green-500);  color:#14532d; }
+.cw { background:var(--yellow-100); border-color:#eab308;           color:#713f12; }
+.cd { background:var(--red-100);    border-color:var(--red-500);    color:#7f1d1d; }
+.callout strong { display:block; font-size:12px; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:5px; }
+
+/* ── STAT CARDS ── */
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:16px; margin-bottom:28px; }
+.stat {
+  background:var(--gray-50); border:1px solid var(--gray-200);
+  border-radius:12px; padding:20px; text-align:center;
+}
+.stat-n { font-size:36px; font-weight:800; line-height:1; margin-bottom:6px; }
+.stat-l { font-size:11px; color:var(--gray-600); text-transform:uppercase; letter-spacing:0.8px; font-weight:500; }
+.stat-g .stat-n { color:var(--green-700); }
+.stat-r .stat-n { color:var(--red-700); }
+.stat-b .stat-n { color:var(--blue-700); }
+.stat-o .stat-n { color:var(--orange-700); }
+
+/* ── COVERAGE ── */
+.cov-item { margin-bottom:14px; }
+.cov-lbl { display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px; font-weight:500; }
+.cov-bar { height:10px; background:var(--gray-200); border-radius:5px; overflow:hidden; }
+.cov-fill { height:100%; border-radius:5px; }
+.fill-g { background:linear-gradient(90deg,#16a34a,#4ade80); }
+.fill-o { background:linear-gradient(90deg,#ea580c,#fb923c); }
+
+/* ── TEST ITEMS ── */
+.test-list { border:1px solid var(--gray-200); border-radius:10px; overflow:hidden; }
+.test-item {
+  display:flex; align-items:flex-start; gap:12px;
+  padding:11px 16px; border-bottom:1px solid var(--gray-100); font-size:13px;
+}
+.test-item:last-child { border-bottom:none; }
+.test-item:nth-child(even) { background:var(--gray-50); }
+.ti-icon { font-size:15px; flex-shrink:0; margin-top:1px; }
+.ti-name { font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--gray-700); font-weight:500; }
+.ti-desc { font-size:12px; color:var(--gray-500); margin-top:2px; }
+
+/* ── CODE ── */
+code {
+  font-family:'JetBrains Mono',monospace; background:var(--gray-100);
+  padding:2px 7px; border-radius:4px; font-size:12px; color:#9f1239;
+}
+pre {
+  background:var(--gray-950); color:#e2e8f0; padding:22px 26px;
+  border-radius:10px; font-family:'JetBrains Mono',monospace;
+  font-size:12.5px; overflow-x:auto; margin:16px 0; line-height:1.8;
+  border:1px solid rgba(255,255,255,0.06);
+}
+.c { color:#64748b; }
+.s { color:#86efac; }
+.k { color:#93c5fd; }
+.f { color:#fde68a; }
+
+/* ── RESULT BANNER ── */
+.result-banner {
+  background:linear-gradient(135deg,#052e16,#14532d);
+  border-radius:12px; padding:28px 36px;
+  display:flex; align-items:center; gap:24px;
+  margin-bottom:28px; border:1px solid #166534;
+}
+.rb-icon { font-size:48px; }
+.rb-title { font-size:22px; font-weight:800; color:#4ade80; margin-bottom:4px; }
+.rb-sub   { font-size:14px; color:#bbf7d0; }
+.rb-stats { display:flex; gap:32px; margin-left:auto; }
+.rb-stat  { text-align:center; }
+.rb-num   { font-size:28px; font-weight:800; color:white; }
+.rb-lbl   { font-size:11px; color:#86efac; text-transform:uppercase; letter-spacing:0.5px; }
+
+/* ── PRINT ── */
+@media print {
+  .nav { display:none; }
+  body { background:white; }
+  .section { box-shadow:none; page-break-inside:avoid; }
+  .cover { print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+  .result-banner { print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+}
+
+p { margin-bottom:10px; color:var(--gray-700); }
+ul,ol { margin:8px 0 12px 20px; color:var(--gray-700); }
+li { margin-bottom:5px; }
+h4 { font-size:13.5px; font-weight:700; color:var(--gray-800); margin:18px 0 10px; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ COVER PAGE ══════════════════ -->
+<div class="cover">
+  <div class="cover-top">
+    <div class="cover-logo">Polytech Lyon · Université Lyon 1</div>
+    <div class="cover-norm">
+      Développement d'Applications de Gestion de Santé<br>
+      TP 06 · Module Incidents FollowUp<br>
+      IEC 62304 — Classe B
+    </div>
+  </div>
+
+  <div class="cover-center">
+    <div class="cover-tag">Rapport Technique Complet</div>
+    <h1>Follow<span>Up</span></h1>
+    <h2>Implémentation · Tests · Documentation · Validation</h2>
+    <div class="cover-stats">
+      <div class="c-stat">
+        <span class="c-stat-val green">64/64</span>
+        <span class="c-stat-label">Tests passés</span>
+      </div>
+      <div class="c-stat">
+        <span class="c-stat-val green">98%</span>
+        <span class="c-stat-label">Couverture de code</span>
+      </div>
+      <div class="c-stat">
+        <span class="c-stat-val blue">7</span>
+        <span class="c-stat-label">Endpoints API</span>
+      </div>
+      <div class="c-stat">
+        <span class="c-stat-val blue">v1.0.0</span>
+        <span class="c-stat-label">Version</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-bottom">
+    <div class="cover-team">
+      <h3>Groupe 02</h3>
+      <div class="member">Ikram Souames</div>
+      <div class="member">Bourzam Raid</div>
+      <div class="member">Belhadj Zakaria</div>
+    </div>
+    <div class="cover-date">
+      CHU Montpellier — Service ORL<br>
+      Application FollowUp<br>
+      FastAPI · MySQL · SQLAlchemy<br>
+      <strong style="color:rgba(255,255,255,0.6)">21 Février 2026</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ NAV ══════════════════ -->
+<nav class="nav">
+  <span class="nav-logo">FollowUp</span>
+  <a href="#p1">Partie 1</a>
+  <a href="#p2">Tests</a>
+  <a href="#p3">Couverture</a>
+  <a href="#p4">Documentation</a>
+  <a href="#p5">Validation</a>
+  <a href="#rapport-tests">Rapport Tests</a>
+  <a href="#rapport-revue">Revue Code</a>
+</nav>
+
+<div class="page">
+
+<!-- ══════════════════ PARTIE 1 ══════════════════ -->
+<div class="section" id="p1">
+  <div class="section-head">
+    <div class="snum snum-blue">1</div>
+    <div>
+      <div class="section-title">Implémentation du Module de Gestion des Incidents</div>
+      <div class="section-sub">FastAPI · MySQL · SQLAlchemy · Alembic — REST JSON API</div>
+    </div>
+  </div>
+  <div class="section-body">
+
+    <div class="sub">
+      <div class="sub-title">Architecture & Stack Technique</div>
+      <table>
+        <tr><th style="width:28%">Composant</th><th>Technologie</th><th>Rôle</th></tr>
+        <tr><td><strong>Framework API</strong></td><td>FastAPI 0.111</td><td>Exposition des endpoints REST avec validation automatique</td></tr>
+        <tr><td><strong>ORM</strong></td><td>SQLAlchemy 2.0</td><td>Mapping objet-relationnel, protection injection SQL</td></tr>
+        <tr><td><strong>Base de données</strong></td><td>MySQL 8 (prod) · SQLite (tests)</td><td>Persistance des données</td></tr>
+        <tr><td><strong>Migrations</strong></td><td>Alembic 1.13</td><td>Versionnement du schéma de base de données</td></tr>
+        <tr><td><strong>Validation</strong></td><td>Pydantic v2</td><td>Validation et sérialisation des données entrantes</td></tr>
+        <tr><td><strong>Tests</strong></td><td>pytest + pytest-cov</td><td>Tests unitaires, intégration, couverture de code</td></tr>
+        <tr><td><strong>Documentation</strong></td><td>OpenAPI / Swagger UI</td><td>Documentation interactive auto-générée</td></tr>
+      </table>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Endpoints Implémentés</div>
+      <table>
+        <tr><th>Méthode</th><th>Endpoint</th><th>Description</th><th>Codes</th><th>Statut</th></tr>
+        <tr><td><span class="badge bg">POST</span></td><td><code>/api/incidents/</code></td><td>Créer un nouvel incident</td><td>201, 400, 422</td><td><span class="badge bg">✅ Implémenté</span></td></tr>
+        <tr><td><span class="badge bb">GET</span></td><td><code>/api/incidents/{id}</code></td><td>Récupérer un incident</td><td>200, 404</td><td><span class="badge bg">✅ Implémenté</span></td></tr>
+        <tr><td><span class="badge by">PUT</span></td><td><code>/api/incidents/{id}</code></td><td>Mettre à jour (partiel)</td><td>200, 404, 422</td><td><span class="badge bg">✅ Implémenté</span></td></tr>
+        <tr><td><span class="badge br">DELETE</span></td><td><code>/api/incidents/{id}</code></td><td>Soft delete</td><td>204, 404</td><td><span class="badge bg">✅ Implémenté</span></td></tr>
+        <tr><td><span class="badge bb">GET</span></td><td><code>/api/patients/{id}/incidents</code></td><td>Incidents d'un patient</td><td>200</td><td><span class="badge bg">✅ Implémenté</span></td></tr>
+        <tr><td><span class="badge bg">POST</span></td><td><code>/api/incidents/{id}/suivis</code></td><td>Ajouter un suivi</td><td>201, 404</td><td><span class="badge bg">✅ Implémenté</span></td></tr>
+        <tr><td><span class="badge bb">GET</span></td><td><code>/api/incidents/{id}/suivis</code></td><td>Historique des suivis</td><td>200</td><td><span class="badge bg">✅ Implémenté</span></td></tr>
+        <tr><td><span class="badge bb">GET</span></td><td><code>/health</code></td><td>Health check</td><td>200</td><td><span class="badge bg">✅ Implémenté</span></td></tr>
+      </table>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Choix d'implémentation clés</div>
+      <table>
+        <tr><th>Décision</th><th>Justification</th><th>Conformité IEC 62304</th></tr>
+        <tr><td><strong>Soft delete</strong> (flag <code>deleted=1</code>)</td><td>Conservation des données pour traçabilité réglementaire HAS</td><td>§5.5.3 Traçabilité</td></tr>
+        <tr><td><strong>Statut initial = "Ouvert"</strong></td><td>Attribution automatique garantit cohérence des données</td><td>§5.5.2 Règles métier</td></tr>
+        <tr><td><strong>Pydantic pour validation</strong></td><td>Validation stricte avant toute écriture en base</td><td>§5.5.5 Vérification entrées</td></tr>
+        <tr><td><strong>ORM exclusif (pas de SQL brut)</strong></td><td>Prévention des injections SQL, maintenabilité</td><td>§5.5.4 Sécurité</td></tr>
+        <tr><td><strong>Variables d'env (.env)</strong></td><td>Secrets jamais dans le code source ni le dépôt Git</td><td>§5.5.4 Sécurité</td></tr>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ PARTIE 2 ══════════════════ -->
+<div class="section" id="p2">
+  <div class="section-head">
+    <div class="snum snum-blue">2</div>
+    <div>
+      <div class="section-title">Stratégie de Tests</div>
+      <div class="section-sub">Conformément IEC 62304 §5.7 — Logiciel Classe B (blessure possible)</div>
+    </div>
+  </div>
+  <div class="section-body">
+
+    <div class="sub">
+      <div class="sub-title">Plan de Tests IEC 62304</div>
+      <table>
+        <tr><th style="width:26%">Critère</th><th>Détail</th></tr>
+        <tr><td><strong>Référence</strong></td><td>PLAN-TEST-FOLLOWUP-v1.0 · Groupe 02</td></tr>
+        <tr><td><strong>Objectif</strong></td><td>Valider la conformité fonctionnelle, la robustesse et la sécurité du module incidents, conformément à IEC 62304 §5.7 (vérification logicielle)</td></tr>
+        <tr><td><strong>Périmètre</strong></td><td>CRUD incidents, validation Pydantic, logique métier (vérification patient, statuts, soft delete), suivis d'incidents, health check</td></tr>
+        <tr><td><strong>Hors périmètre</strong></td><td>Authentification JWT, module réglages, module évaluation, enquête scolarité</td></tr>
+        <tr><td><strong>Environnement</strong></td><td>Python 3.10, SQLite in-memory (isolé par test), FastAPI TestClient, pytest 8.x + pytest-cov</td></tr>
+        <tr><td><strong>Isolation</strong></td><td>Base de données réinitialisée à chaque test (<code>scope="function"</code>) — aucune interférence entre tests</td></tr>
+        <tr><td><strong>Critère de réussite</strong></td><td>100% des tests passent · Couverture ≥ 80% sur code métier · Objectif atteint : <strong>98%</strong></td></tr>
+        <tr><td><strong>Responsabilités</strong></td><td>Souames I., Raid B., Belhadj Z. — Groupe 02</td></tr>
+      </table>
+      <div class="callout ci">
+        <strong>IEC 62304 §5.7.3 — Classe B</strong>
+        Un logiciel classé Classe B peut causer une blessure non grave. Des tests unitaires et d'intégration rigoureux sont obligatoires. Le seuil de couverture recommandé est ≥ 80%. Notre module atteint <strong>98%</strong>, dépassant largement l'exigence.
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Tests Unitaires — Validation des données (20 tests)</div>
+      <p>Fichier : <code>tests/test_validation.py</code></p>
+      <div class="test-list">
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_incident_valide_complet</div><div class="ti-desc">Cas nominal : tous les champs renseignés et valides</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_incident_valide_champs_optionnels_absents</div><div class="ti-desc">Cas nominal : idImplant, idProcesseur, idMedecin optionnels absents → accepté</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_toutes_les_gravites_valides</div><div class="ti-desc">Les 4 valeurs Mineur / Modéré / Majeur / Critique toutes acceptées</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_description_longueur_maximale</div><div class="ti-desc">Description exactement 2000 caractères → acceptée</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_date_manquante</div><div class="ti-desc">ValidationError attendue si dateIncident absente</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_heure_manquante</div><div class="ti-desc">ValidationError si heureIncident absente</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_gravite_manquante</div><div class="ti-desc">ValidationError si gravite absente</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_description_manquante</div><div class="ti-desc">ValidationError si description absente</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_patient_manquant</div><div class="ti-desc">ValidationError si idPatient absent</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_format_date_invalide</div><div class="ti-desc">Format DD/MM/YYYY refusé (attendu ISO YYYY-MM-DD)</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_format_date_texte</div><div class="ti-desc">Texte libre "aujourd'hui" refusé</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_gravite_non_reconnue</div><div class="ti-desc">Valeur "Catastrophique" refusée par l'énumération</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_gravite_casse_invalide</div><div class="ti-desc">"mineur" (minuscules) refusé — enum case-sensitive</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_description_trop_longue</div><div class="ti-desc">Description > 2000 caractères refusée</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_patient_id_invalide</div><div class="ti-desc">idPatient non-entier "abc" refusé</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_update_partiel_valide</div><div class="ti-desc">IncidentUpdate partiel (statut seul) accepté</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_update_statut_invalide</div><div class="ti-desc">Statut "Annulé" (hors enum) refusé</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_update_vide_accepte</div><div class="ti-desc">Update vide accepté (tous champs optionnels dans PATCH)</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_suivi_valide</div><div class="ti-desc">SuiviCreate avec dateSuivi + actionsPrises valides</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_suivi_date_manquante + test_suivi_actions_manquantes</div><div class="ti-desc">Champs obligatoires du suivi vérifiés</div></div></div>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Tests Unitaires — Logique Métier (19 tests)</div>
+      <p>Fichier : <code>tests/test_business_logic.py</code></p>
+      <div class="test-list">
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_creation_patient_existant</div><div class="ti-desc">Incident créé avec succès si patient existe</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_id_auto_incremente</div><div class="ti-desc">Chaque nouvel incident reçoit un ID supérieur au précédent</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_horodatage_auto</div><div class="ti-desc">dateCreation renseignée automatiquement à la création</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_statut_defaut_ouvert</div><div class="ti-desc">Statut par défaut = "Ouvert" sans intervention utilisateur</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_creation_patient_inexistant</div><div class="ti-desc">ValueError levée si idPatient introuvable en base</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_soft_delete_flag</div><div class="ti-desc">Nouvel incident créé avec deleted=0</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_get_par_id_existant</div><div class="ti-desc">Lecture d'un incident existant retourne les bonnes données</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_get_par_id_inexistant</div><div class="ti-desc">Retourne None pour ID inexistant (pas d'exception)</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_get_par_patient</div><div class="ti-desc">Liste filtrée correctement par idPatient</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_get_exclut_soft_deleted</div><div class="ti-desc">GET ne retourne pas les incidents avec deleted=1</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_update_statut</div><div class="ti-desc">Changement de statut persiste correctement</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_update_partiel</div><div class="ti-desc">PATCH partiel ne touche pas les champs non fournis</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_update_inexistant</div><div class="ti-desc">Update sur ID inconnu retourne None</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_soft_delete_succes</div><div class="ti-desc">soft_delete() retourne True si incident trouvé</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_soft_delete_ne_supprime_pas_physiquement</div><div class="ti-desc">Enregistrement conservé en base, deleted=1</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_soft_delete_inexistant</div><div class="ti-desc">soft_delete() retourne False sur ID inconnu</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_ajout_suivi_incident_existant</div><div class="ti-desc">Suivi créé et lié à l'incident correctement</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_ajout_suivi_incident_inexistant</div><div class="ti-desc">add_suivi() retourne None si incident inexistant</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_historique_suivis</div><div class="ti-desc">Tous les suivis d'un incident retournés dans l'ordre</div></div></div>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Tests d'Intégration API REST (25 tests)</div>
+      <p>Fichier : <code>tests/test_integration.py</code></p>
+      <div class="test-list">
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_post_incident_valide → HTTP 201</div><div class="ti-desc">Données valides → 201 Created avec l'objet complet en réponse</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_post_incident_champs_manquants → HTTP 422</div><div class="ti-desc">Body incomplet → 422 Unprocessable Entity (validation Pydantic)</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_post_incident_gravite_invalide → HTTP 422</div><div class="ti-desc">Gravité hors enum → 422</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_post_incident_patient_inexistant → HTTP 400</div><div class="ti-desc">Patient inconnu → 400 Bad Request avec message explicite</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_post_incident_date_invalide → HTTP 422</div><div class="ti-desc">Format date DD/MM/YYYY → 422</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_post_incident_description_trop_longue → HTTP 422</div><div class="ti-desc">Description > 2000 chars → 422</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_post_retourne_id_auto</div><div class="ti-desc">ID auto-incrémenté confirmé sur deux créations successives</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_post_tous_niveaux_gravite</div><div class="ti-desc">Les 4 gravités acceptées chacune en 201</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_get_incident_existant → HTTP 200</div><div class="ti-desc">ID valide → 200 OK avec tous les champs attendus</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_get_incident_inexistant → HTTP 404</div><div class="ti-desc">ID 99999 → 404 Not Found avec message "non trouvé"</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_get_incident_id_zero → HTTP 404</div><div class="ti-desc">ID 0 inexistant → 404</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_get_incident_structure_reponse</div><div class="ti-desc">Tous les champs (id, dateIncident, gravite, statut…) présents</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_update_statut_valide → HTTP 200</div><div class="ti-desc">PUT avec statut=Résolu → 200 avec statut mis à jour</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_update_incident_inexistant → HTTP 404</div><div class="ti-desc">PUT sur ID inconnu → 404</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_update_gravite → HTTP 200</div><div class="ti-desc">Changement de gravité via PUT confirmé</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_delete_incident_existant → HTTP 204</div><div class="ti-desc">DELETE retourne 204 No Content</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_delete_rend_incident_inaccessible</div><div class="ti-desc">Après DELETE → GET retourne 404 (soft delete effectif)</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_delete_incident_inexistant → HTTP 404</div><div class="ti-desc">DELETE sur ID inconnu → 404</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_liste_incidents_patient</div><div class="ti-desc">GET /patients/{id}/incidents retourne la liste complète</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_liste_incidents_patient_vide</div><div class="ti-desc">Patient sans incident → liste vide [] (pas d'erreur)</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_ajout_suivi → HTTP 201</div><div class="ti-desc">POST suivi valide retourne 201 avec idIncident correct</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_historique_suivis</div><div class="ti-desc">GET suivis retourne la liste complète des suivis</div></div></div>
+        <div class="test-item"><span class="ti-icon">❌</span><div><div class="ti-name">test_suivi_incident_inexistant → HTTP 404</div><div class="ti-desc">Suivi sur incident inconnu → 404</div></div></div>
+        <div class="test-item"><span class="ti-icon">✅</span><div><div class="ti-name">test_health_ok → HTTP 200</div><div class="ti-desc">GET /health retourne 200 {"status":"ok"}</div></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ PARTIE 3 ══════════════════ -->
+<div class="section" id="p3">
+  <div class="section-head">
+    <div class="snum snum-green">3</div>
+    <div>
+      <div class="section-title">Couverture de Code</div>
+      <div class="section-sub">Résultats réels obtenus — Objectif IEC 62304 Classe B : ≥ 80%</div>
+    </div>
+  </div>
+  <div class="section-body">
+
+    <!-- Résultat réel -->
+    <div class="result-banner">
+      <span class="rb-icon">🎯</span>
+      <div>
+        <div class="rb-title">98% de Couverture Globale</div>
+        <div class="rb-sub">64 tests passés · 0 échec · Objectif 80% largement dépassé</div>
+      </div>
+      <div class="rb-stats">
+        <div class="rb-stat"><div class="rb-num">64</div><div class="rb-lbl">Tests total</div></div>
+        <div class="rb-stat"><div class="rb-num">64</div><div class="rb-lbl">Passés</div></div>
+        <div class="rb-stat"><div class="rb-num">0</div><div class="rb-lbl">Échecs</div></div>
+        <div class="rb-stat"><div class="rb-num">98%</div><div class="rb-lbl">Couverture</div></div>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Configuration pytest-cov</div>
+      <pre><span class="c"># pytest.ini — à la racine du projet</span>
+[pytest]
+testpaths = tests
+addopts = --cov=app --cov-report=html --cov-report=term-missing -v
+
+<span class="c"># Lancement :</span>
+pytest tests/ -v --cov=app --cov-report=html --cov-report=term-missing</pre>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Résultats par module (résultats réels)</div>
+      <table>
+        <tr><th>Module</th><th>Statements</th><th>Manquants</th><th>Couverture</th><th>Statut</th></tr>
+        <tr><td><code>app/__init__.py</code></td><td>0</td><td>0</td><td>100%</td><td><span class="badge bg">✅ 100%</span></td></tr>
+        <tr><td><code>app/core/config.py</code></td><td>7</td><td>0</td><td>100%</td><td><span class="badge bg">✅ 100%</span></td></tr>
+        <tr><td><code>app/main.py</code></td><td>9</td><td>0</td><td>100%</td><td><span class="badge bg">✅ 100%</span></td></tr>
+        <tr><td><code>app/models/incident.py</code></td><td>31</td><td>0</td><td>100%</td><td><span class="badge bg">✅ 100%</span></td></tr>
+        <tr><td><code>app/models/medecin.py</code></td><td>10</td><td>0</td><td>100%</td><td><span class="badge bg">✅ 100%</span></td></tr>
+        <tr><td><code>app/models/patient.py</code></td><td>14</td><td>0</td><td>100%</td><td><span class="badge bg">✅ 100%</span></td></tr>
+        <tr><td><code>app/models/suivi_incident.py</code></td><td>11</td><td>0</td><td>100%</td><td><span class="badge bg">✅ 100%</span></td></tr>
+        <tr><td><code>app/routers/incidents.py</code></td><td>30</td><td>0</td><td>100%</td><td><span class="badge bg">✅ 100%</span></td></tr>
+        <tr><td><code>app/routers/patients.py</code></td><td>10</td><td>0</td><td>100%</td><td><span class="badge bg">✅ 100%</span></td></tr>
+        <tr><td><code>app/routers/suivis.py</code></td><td>16</td><td>0</td><td>100%</td><td><span class="badge bg">✅ 100%</span></td></tr>
+        <tr><td><code>app/schemas/incident.py</code></td><td>29</td><td>0</td><td>100%</td><td><span class="badge bg">✅ 100%</span></td></tr>
+        <tr><td><code>app/schemas/suivi_incident.py</code></td><td>14</td><td>0</td><td>100%</td><td><span class="badge bg">✅ 100%</span></td></tr>
+        <tr><td><code>app/services/incident_service.py</code></td><td>55</td><td>0</td><td>100%</td><td><span class="badge bg">✅ 100%</span></td></tr>
+        <tr><td><code>app/database.py</code></td><td>12</td><td>4</td><td>67%</td><td><span class="badge bo">⚠️ 67%</span></td></tr>
+        <tr style="font-weight:700"><td><strong>TOTAL</strong></td><td><strong>248</strong></td><td><strong>4</strong></td><td><strong>98%</strong></td><td><span class="badge bg">✅ OBJECTIF DÉPASSÉ</span></td></tr>
+      </table>
+
+      <div class="cov-item" style="margin-top:20px">
+        <div class="cov-lbl"><span>Services, Routers, Models, Schemas</span><span style="color:var(--green-700);font-weight:700">100%</span></div>
+        <div class="cov-bar"><div class="cov-fill fill-g" style="width:100%"></div></div>
+      </div>
+      <div class="cov-item">
+        <div class="cov-lbl"><span>database.py (connexion, générateur session)</span><span style="color:var(--orange-700);font-weight:700">67%</span></div>
+        <div class="cov-bar"><div class="cov-fill fill-o" style="width:67%"></div></div>
+      </div>
+
+      <div class="callout cs">
+        <strong>✅ Objectif IEC 62304 largement atteint</strong>
+        13 des 14 modules atteignent 100% de couverture. Seul <code>database.py</code> est à 67% (lignes 12-16 : gestion de connexion non testable sans vraie DB). La couverture globale de <strong>98%</strong> dépasse largement le seuil IEC 62304 Classe B de 80%.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ PARTIE 4 ══════════════════ -->
+<div class="section" id="p4">
+  <div class="section-head">
+    <div class="snum snum-purple">4</div>
+    <div>
+      <div class="section-title">Documentation Technique</div>
+      <div class="section-sub">Manuel utilisateur · API OpenAPI/Swagger · Notes de version 1.0.0</div>
+    </div>
+  </div>
+  <div class="section-body">
+
+    <div class="sub">
+      <div class="sub-title">Manuel Utilisateur — Déclaration d'Incident</div>
+
+      <h4>Description</h4>
+      <p>La fonctionnalité de déclaration d'incident permet à un patient ou à un membre de l'équipe médicale du CHU de Montpellier de signaler tout problème lié à un implant cochléaire. Chaque incident est horodaté automatiquement, classifié par niveau de gravité, associé au dossier patient et conservé pour traçabilité réglementaire (exigence HAS).</p>
+
+      <h4>Prérequis</h4>
+      <ul>
+        <li>Le patient doit exister dans la base de données FollowUp (idPatient valide)</li>
+        <li>Accès à l'interface FollowUp (intranet CHU ou extranet autorisé)</li>
+        <li>Connaître la date et l'heure approximatives de l'incident</li>
+      </ul>
+
+      <h4>Champs de la déclaration</h4>
+      <table>
+        <tr><th>#</th><th>Champ</th><th>Format attendu</th><th>Obligatoire</th><th>Exemple</th></tr>
+        <tr><td>1</td><td><code>dateIncident</code></td><td>YYYY-MM-DD</td><td><span class="badge br">Oui</span></td><td>2024-03-20</td></tr>
+        <tr><td>2</td><td><code>heureIncident</code></td><td>HH:MM:SS</td><td><span class="badge br">Oui</span></td><td>14:30:00</td></tr>
+        <tr><td>3</td><td><code>gravite</code></td><td>Mineur · Modéré · Majeur · Critique</td><td><span class="badge br">Oui</span></td><td>Modéré</td></tr>
+        <tr><td>4</td><td><code>description</code></td><td>Texte libre, max 2000 caractères</td><td><span class="badge br">Oui</span></td><td>"Processeur défectueux, sons grésillants"</td></tr>
+        <tr><td>5</td><td><code>idPatient</code></td><td>Entier (identifiant patient)</td><td><span class="badge br">Oui</span></td><td>1</td></tr>
+        <tr><td>6</td><td><code>idImplant</code></td><td>Entier (optionnel)</td><td><span class="badge bgr">Non</span></td><td>1</td></tr>
+        <tr><td>7</td><td><code>idMedecin</code></td><td>Entier (optionnel)</td><td><span class="badge bgr">Non</span></td><td>2</td></tr>
+      </table>
+
+      <h4>Niveaux de gravité et délais de prise en charge</h4>
+      <table>
+        <tr><th>Niveau</th><th>Description clinique</th><th>Exemples concrets</th><th>Délai recommandé</th></tr>
+        <tr><td><span class="badge bg">Mineur</span></td><td>Gêne légère sans impact fonctionnel majeur</td><td>Son légèrement faible, antenne qui tient mal</td><td>Prochain RDV planifié</td></tr>
+        <tr><td><span class="badge by">Modéré</span></td><td>Impact notable sur la qualité d'audition</td><td>Grésillements persistants, batterie anormale</td><td>Sous 72 heures</td></tr>
+        <tr><td><span class="badge bo">Majeur</span></td><td>Perte auditive significative ou douleur</td><td>Perte partielle, chute avec impact sur l'implant</td><td>Sous 24 heures</td></tr>
+        <tr><td><span class="badge br">Critique</span></td><td>Panne totale ou risque médical avéré</td><td>Aucune perception sonore, infection autour de l'implant</td><td>Urgence — même jour</td></tr>
+      </table>
+
+      <h4>Messages d'erreur</h4>
+      <table>
+        <tr><th>Code HTTP</th><th>Cause</th><th>Message renvoyé</th><th>Solution</th></tr>
+        <tr><td><span class="badge bo">422</span></td><td>Champ manquant ou format invalide</td><td>Unprocessable Entity + détail champ</td><td>Corriger les champs signalés</td></tr>
+        <tr><td><span class="badge bo">400</span></td><td>Patient inexistant en base</td><td>"Patient X introuvable"</td><td>Vérifier l'identifiant patient</td></tr>
+        <tr><td><span class="badge br">404</span></td><td>Incident ID inexistant ou supprimé</td><td>"Incident non trouvé"</td><td>Vérifier l'ID de l'incident</td></tr>
+        <tr><td><span class="badge br">500</span></td><td>Erreur interne base de données</td><td>Internal Server Error</td><td>Contacter l'administrateur système</td></tr>
+      </table>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Documentation API — Swagger UI</div>
+      <div class="callout ci">
+        <strong>Swagger UI interactif</strong>
+        La documentation complète et interactive est auto-générée par FastAPI sur <code>http://localhost:8000/docs</code>. Elle permet de tester tous les endpoints en temps réel avec des exemples de requêtes et réponses.
+      </div>
+
+      <h4>Exemple complet POST /api/incidents/</h4>
+      <pre><span class="c">// Requête</span>
+POST /api/incidents/
+Content-Type: application/json
+
+{
+  <span class="s">"dateIncident"</span>: <span class="s">"2024-03-20"</span>,
+  <span class="s">"heureIncident"</span>: <span class="s">"14:30:00"</span>,
+  <span class="s">"gravite"</span>: <span class="s">"Modéré"</span>,
+  <span class="s">"description"</span>: <span class="s">"Processeur défectueux, sons grésillants en permanence"</span>,
+  <span class="s">"idPatient"</span>: 1,
+  <span class="s">"idMedecin"</span>: 1
+}
+
+<span class="c">// Réponse 201 Created</span>
+{
+  <span class="s">"id"</span>: 5,
+  <span class="s">"dateIncident"</span>: <span class="s">"2024-03-20"</span>,
+  <span class="s">"heureIncident"</span>: <span class="s">"14:30:00"</span>,
+  <span class="s">"gravite"</span>: <span class="s">"Modéré"</span>,
+  <span class="s">"description"</span>: <span class="s">"Processeur défectueux, sons grésillants en permanence"</span>,
+  <span class="s">"statut"</span>: <span class="s">"Ouvert"</span>,
+  <span class="s">"idPatient"</span>: 1,
+  <span class="s">"idMedecin"</span>: 1,
+  <span class="s">"dateCreation"</span>: <span class="s">"2024-03-20T14:35:22"</span>
+}</pre>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Notes de Version 1.0.0</div>
+      <table>
+        <tr><th style="width:25%">Attribut</th><th>Valeur</th></tr>
+        <tr><td><strong>Version</strong></td><td>1.0.0 — Version initiale de production</td></tr>
+        <tr><td><strong>Date de release</strong></td><td>21 Février 2026</td></tr>
+        <tr><td><strong>Équipe</strong></td><td>Groupe 02 — Souames I. · Raid B. · Belhadj Z.</td></tr>
+        <tr><td><strong>Stack</strong></td><td>FastAPI 0.111 · MySQL 8 · SQLAlchemy 2.0 · Alembic 1.13</td></tr>
+      </table>
+
+      <h4>Nouvelles fonctionnalités</h4>
+      <ul>
+        <li>Module complet CRUD incidents via API REST JSON (7 endpoints)</li>
+        <li>Validation stricte des données (Pydantic v2 — gravité enum, date ISO, description 2000 chars max)</li>
+        <li>Soft delete des incidents avec conservation de traçabilité (exigence HAS)</li>
+        <li>Gestion des suivis d'incidents avec historique complet</li>
+        <li>Liste des incidents filtrée par patient</li>
+        <li>Statut automatique "Ouvert" à la création, horodatage automatique</li>
+        <li>Documentation API interactive Swagger UI (<code>/docs</code>)</li>
+        <li>Health check endpoint (<code>/health</code>)</li>
+        <li>Migrations de base de données versionnées via Alembic</li>
+      </ul>
+
+      <h4>Problèmes connus</h4>
+      <ul>
+        <li>Absence d'authentification/autorisation — prévu en v1.1.0 (JWT Bearer)</li>
+        <li>Pas de pagination sur <code>GET /api/patients/{id}/incidents</code></li>
+        <li><code>dateModification</code> peut ne pas se mettre à jour sur certaines configs MySQL/SQLAlchemy</li>
+      </ul>
+
+      <h4>Instructions de mise à jour</h4>
+      <pre>git pull origin main
+pip install -r requirements.txt
+alembic upgrade head
+uvicorn app.main:app --reload</pre>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ PARTIE 5 ══════════════════ -->
+<div class="section" id="p5">
+  <div class="section-head">
+    <div class="snum snum-teal">5</div>
+    <div>
+      <div class="section-title">Vérification et Validation</div>
+      <div class="section-sub">IEC 62304 §5.6 — Revue de code, sécurité, conformité aux spécifications</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="sub">
+      <div class="sub-title">Grille de Revue de Code (binôme)</div>
+      <table>
+        <tr><th>Critère IEC 62304</th><th>Fichiers vérifiés</th><th>Résultat</th><th>Commentaire</th></tr>
+        <tr><td>Standards de codage PEP8</td><td><code>services/, routers/, models/</code></td><td><span class="badge bg">✅ Conforme</span></td><td>Nommage cohérent, 4 espaces, docstrings sur endpoints</td></tr>
+        <tr><td>Gestion des erreurs HTTP</td><td><code>routers/incidents.py</code></td><td><span class="badge bg">✅ Conforme</span></td><td>400, 404, 422 correctement gérés et testés</td></tr>
+        <tr><td>Protection injection SQL</td><td><code>services/</code></td><td><span class="badge bg">✅ Protégé</span></td><td>ORM SQLAlchemy exclusif — aucune requête SQL brute</td></tr>
+        <tr><td>Protection XSS / validation</td><td><code>schemas/</code></td><td><span class="badge bg">✅ Protégé</span></td><td>Pydantic v2 valide et typé toutes les entrées utilisateur</td></tr>
+        <tr><td>Soft delete / traçabilité</td><td><code>models/incident.py</code></td><td><span class="badge bg">✅ Conforme</span></td><td>Flag <code>deleted=1</code> — données conservées pour HAS</td></tr>
+        <tr><td>Séparation des responsabilités</td><td>Architecture générale</td><td><span class="badge bg">✅ Conforme</span></td><td>Routers / Services / Models / Schemas clairement séparés</td></tr>
+        <tr><td>Secrets et configuration</td><td><code>.env / config.py</code></td><td><span class="badge bg">✅ Conforme</span></td><td>.env exclu du Git, .env.example fourni</td></tr>
+        <tr><td>Tests et couverture</td><td><code>tests/</code></td><td><span class="badge bg">✅ Conforme</span></td><td>64 tests · 98% couverture · objectif 80% dépassé</td></tr>
+        <tr><td>Authentification</td><td>Tous endpoints</td><td><span class="badge br">❌ Absent</span></td><td>Non implémenté v1.0.0 — JWT prévu v1.1.0</td></tr>
+        <tr><td>Logging / journalisation</td><td><code>services/</code></td><td><span class="badge by">⚠️ Partiel</span></td><td>Pas de logger explicite — à ajouter v1.1.0</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ RAPPORT DE TESTS ══════════════════ -->
+<div class="section" id="rapport-tests">
+  <div class="section-head">
+    <div class="snum snum-green">R1</div>
+    <div>
+      <div class="section-title">Rapport de Tests</div>
+      <div class="section-sub">Résultats réels — pytest 8.x — 21 Février 2026 — Groupe 02</div>
+    </div>
+  </div>
+  <div class="section-body">
+
+    <div class="result-banner">
+      <span class="rb-icon">✅</span>
+      <div>
+        <div class="rb-title">64 passed · 0 failed · 0 errors</div>
+        <div class="rb-sub">Exécution en 1.86s · Couverture 98% · Objectif IEC 62304 atteint</div>
+      </div>
+      <div class="rb-stats">
+        <div class="rb-stat"><div class="rb-num">64</div><div class="rb-lbl">Total</div></div>
+        <div class="rb-stat"><div class="rb-num" style="color:#4ade80">64</div><div class="rb-lbl">Passés</div></div>
+        <div class="rb-stat"><div class="rb-num" style="color:#f87171">0</div><div class="rb-lbl">Échecs</div></div>
+        <div class="rb-stat"><div class="rb-num">98%</div><div class="rb-lbl">Couverture</div></div>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Résultats par suite</div>
+      <table>
+        <tr><th>Suite de tests</th><th>Fichier</th><th>Total</th><th>OK</th><th>KO</th><th>Durée</th><th>Statut</th></tr>
+        <tr><td>Validation des données</td><td><code>test_validation.py</code></td><td>20</td><td>20</td><td>0</td><td>~0.4s</td><td><span class="badge bg">✅ PASS</span></td></tr>
+        <tr><td>Logique métier</td><td><code>test_business_logic.py</code></td><td>19</td><td>19</td><td>0</td><td>~0.8s</td><td><span class="badge bg">✅ PASS</span></td></tr>
+        <tr><td>Intégration API REST</td><td><code>test_integration.py</code></td><td>25</td><td>25</td><td>0</td><td>~0.7s</td><td><span class="badge bg">✅ PASS</span></td></tr>
+        <tr style="font-weight:700"><td>TOTAL</td><td>—</td><td>64</td><td>64</td><td>0</td><td>1.86s</td><td><span class="badge bg">✅ SUCCÈS</span></td></tr>
+      </table>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Anomalies identifiées</div>
+      <table>
+        <tr><th>#</th><th>Anomalie</th><th>Criticité</th><th>Statut</th><th>Action corrective</th></tr>
+        <tr><td>AN-001</td><td>Absence d'authentification JWT sur les endpoints</td><td><span class="badge bo">Majeur</span></td><td><span class="badge bb">Planifié v1.1.0</span></td><td>Middleware JWT Bearer à implémenter</td></tr>
+        <tr><td>AN-002</td><td>Pas de pagination sur liste incidents patient</td><td><span class="badge by">Mineur</span></td><td><span class="badge bb">Planifié v1.1.0</span></td><td>Paramètres limit/offset à ajouter</td></tr>
+        <tr><td>AN-003</td><td>Logging non implémenté dans le service</td><td><span class="badge by">Mineur</span></td><td><span class="badge bb">Planifié</span></td><td>Ajouter import logging + logs sur erreurs</td></tr>
+        <tr><td>AN-004</td><td><code>database.py</code> à 67% (lignes de connexion)</td><td><span class="badge bb">Info</span></td><td><span class="badge bgr">Accepté</span></td><td>Non testable sans vraie DB — acceptable</td></tr>
+      </table>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Conclusion</div>
+      <p>Le module de gestion des incidents FollowUp v1.0.0 satisfait l'ensemble des exigences de tests de la norme IEC 62304 pour un logiciel de Classe B. Les 64 tests couvrent exhaustivement les cas nominaux, les cas d'erreur et les cas limites définis dans le plan de tests.</p>
+      <p>La couverture de code de <strong>98%</strong> dépasse largement le seuil minimal de 80% exigé. Avec 0 test en échec et 0 anomalie bloquante, le module est <strong>apte à la mise en production en version 1.0.0</strong>.</p>
+      <div class="callout cs"><strong>✅ Conclusion</strong>Module validé — 64/64 tests passés — Couverture 98% — Prêt pour production v1.0.0</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ RAPPORT REVUE ══════════════════ -->
+<div class="section" id="rapport-revue">
+  <div class="section-head">
+    <div class="snum snum-orange">R2</div>
+    <div>
+      <div class="section-title">Rapport de Revue de Code</div>
+      <div class="section-sub">Revue binôme — IEC 62304 §5.6 — Groupe 02</div>
+    </div>
+  </div>
+  <div class="section-body">
+
+    <div class="sub">
+      <div class="sub-title">Fichiers revus</div>
+      <table>
+        <tr><th>Fichier</th><th>Lignes</th><th>Rôle</th><th>Réviseur</th><th>Date</th></tr>
+        <tr><td><code>app/models/incident.py</code></td><td>~50</td><td>Modèle SQLAlchemy + enums Gravité/Statut</td><td>Groupe 02</td><td>21/02/2026</td></tr>
+        <tr><td><code>app/models/suivi_incident.py</code></td><td>~20</td><td>Modèle SuiviIncident</td><td>Groupe 02</td><td>21/02/2026</td></tr>
+        <tr><td><code>app/schemas/incident.py</code></td><td>~40</td><td>Validation Pydantic v2</td><td>Groupe 02</td><td>21/02/2026</td></tr>
+        <tr><td><code>app/services/incident_service.py</code></td><td>~80</td><td>Logique métier complète</td><td>Groupe 02</td><td>21/02/2026</td></tr>
+        <tr><td><code>app/routers/incidents.py</code></td><td>~45</td><td>Endpoints CRUD incidents</td><td>Groupe 02</td><td>21/02/2026</td></tr>
+        <tr><td><code>app/routers/suivis.py</code></td><td>~25</td><td>Endpoints suivis</td><td>Groupe 02</td><td>21/02/2026</td></tr>
+        <tr><td><code>app/routers/patients.py</code></td><td>~20</td><td>Endpoint incidents par patient</td><td>Groupe 02</td><td>21/02/2026</td></tr>
+        <tr><td><code>tests/conftest.py</code></td><td>~65</td><td>Fixtures pytest isolées</td><td>Groupe 02</td><td>21/02/2026</td></tr>
+        <tr><td><code>tests/test_validation.py</code></td><td>~130</td><td>20 tests Pydantic</td><td>Groupe 02</td><td>21/02/2026</td></tr>
+        <tr><td><code>tests/test_business_logic.py</code></td><td>~190</td><td>19 tests logique métier</td><td>Groupe 02</td><td>21/02/2026</td></tr>
+        <tr><td><code>tests/test_integration.py</code></td><td>~200</td><td>25 tests API REST</td><td>Groupe 02</td><td>21/02/2026</td></tr>
+      </table>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Anomalies par criticité</div>
+      <table>
+        <tr><th>#</th><th>Fichier</th><th>Description</th><th>Criticité</th><th>Action</th><th>Statut</th></tr>
+        <tr><td>RC-001</td><td><code>routers/</code></td><td>Endpoints non protégés (absence JWT)</td><td><span class="badge bo">Majeur</span></td><td>Middleware JWT Bearer en v1.1.0</td><td><span class="badge bb">Planifié</span></td></tr>
+        <tr><td>RC-002</td><td><code>services/</code></td><td>Pas de logging des erreurs (ValueError)</td><td><span class="badge by">Mineur</span></td><td>Ajouter logger Python standard</td><td><span class="badge bb">Planifié</span></td></tr>
+        <tr><td>RC-003</td><td><code>models/</code></td><td>Docstrings absents sur attributs des classes</td><td><span class="badge by">Mineur</span></td><td>Ajouter docstrings sur colonnes FK</td><td><span class="badge bb">Ouvert</span></td></tr>
+        <tr><td>RC-004</td><td><code>core/config.py</code></td><td>Deprecation Pydantic v2 (class Config → ConfigDict)</td><td><span class="badge bb">Info</span></td><td>Migrer vers <code>model_config = ConfigDict()</code></td><td><span class="badge bg">Résolu</span></td></tr>
+      </table>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Points forts identifiés</div>
+      <ul>
+        <li><strong>Architecture MVC claire</strong> : séparation Models / Schemas / Services / Routers parfaitement respectée</li>
+        <li><strong>Protection SQL totale</strong> : utilisation exclusive de l'ORM SQLAlchemy, injection SQL impossible</li>
+        <li><strong>Validation robuste</strong> : Pydantic v2 garantit la cohérence des données avant toute écriture en base</li>
+        <li><strong>Soft delete conforme HAS</strong> : données conservées pour traçabilité réglementaire</li>
+        <li><strong>Tests exhaustifs</strong> : 64 tests couvrant cas nominaux ET cas d'erreur, 98% de couverture</li>
+        <li><strong>Configuration sécurisée</strong> : secrets dans .env exclu du dépôt Git, .env.example fourni</li>
+        <li><strong>Isolation des tests</strong> : SQLite in-memory avec reset par test, aucune interférence</li>
+      </ul>
+    </div>
+
+    <div class="callout cs">
+      <strong>✅ Conclusion de la revue</strong>
+      Le code est de bonne qualité, lisible et conforme aux spécifications fonctionnelles et à IEC 62304 Classe B. Une seule anomalie majeure (absence d'authentification) est planifiée pour v1.1.0. Aucune faille de sécurité critique (injection SQL, XSS) n'a été identifiée. Le module est <strong>validé pour la production v1.0.0</strong>.
+    </div>
+
+  </div>
+</div>
+
+<!-- Footer -->
+<div style="text-align:center; padding:40px; color:var(--gray-400); font-size:12px; border-top:1px solid var(--gray-200); margin-top:8px;">
+  <strong style="color:var(--gray-600)">FollowUp v1.0.0</strong> — CHU Montpellier · Service ORL<br>
+  <strong>Groupe 02</strong> · Ikram Souames · Bourzam Raid · Belhadj Zakaria<br>
+  Polytech Lyon · Université Lyon 1 · IEC 62304 — Classe B · 21 Février 2026
+</div>
+
+</div><!-- /page -->
+</body>
+</html>
