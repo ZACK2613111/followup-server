@@ -1,10 +1,30 @@
 from pydantic_settings import BaseSettings
+from functools import lru_cache
+from typing import List
+
 
 class Settings(BaseSettings):
-    DATABASE_URL: str
+    # App
+    APP_NAME: str = "FollowUp API"
+    APP_VERSION: str = "1.0.0"
     DEBUG: bool = False
 
-    class Config:
-        env_file = ".env"
+    # Database
+    DATABASE_URL: str = "mysql+pymysql://user:password@localhost/followup"
 
-settings = Settings()
+    # CORS
+    ALLOWED_ORIGINS: List[str] = ["*"]
+
+    model_config = {
+        "env_file": ".env",
+        "env_file_encoding": "utf-8",
+        "extra": "ignore"
+    }
+
+
+@lru_cache()
+def get_settings() -> Settings:
+    return Settings()
+
+
+settings = get_settings()
