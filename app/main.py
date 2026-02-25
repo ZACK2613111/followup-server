@@ -32,7 +32,10 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     """Run startup and shutdown tasks."""
     logger.info("🚀 FollowUp API starting up...")
-    # Create tables if they don't exist (dev convenience — use Alembic in prod)
+
+    # Import ALL models before create_all so SQLAlchemy knows all tables
+    from app.models import incident, suivi_incident, patient, medecin
+
     Base.metadata.create_all(bind=engine)
     logger.info("✅ Database tables verified.")
     yield
