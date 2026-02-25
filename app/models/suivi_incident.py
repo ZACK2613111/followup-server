@@ -1,9 +1,5 @@
-"""
-SuiviIncident model — tracks follow-up actions taken for a given incident.
-"""
-
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Date, DateTime, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, Date, DateTime, Text
 from sqlalchemy.orm import relationship
 from app.database import Base
 
@@ -15,15 +11,12 @@ class SuiviIncident(Base):
     dateSuivi = Column(Date, nullable=False)
     actionsPrises = Column(Text, nullable=False)
 
-    # Foreign keys
-    idIncident = Column(Integer, ForeignKey("incidents.id"), nullable=False)
-    idMedecin = Column(Integer, ForeignKey("medecins.id"), nullable=True)
+    # Sans ForeignKey
+    idIncident = Column(Integer, nullable=False)
+    idMedecin = Column(Integer, nullable=True)
 
-    # Audit
     dateCreation = Column(DateTime, default=datetime.utcnow, nullable=False)
 
-    # Relationships
-    incident = relationship("Incident", back_populates="suivis")
-
-    def __repr__(self):
-        return f"<SuiviIncident id={self.id} idIncident={self.idIncident}>"
+    incident = relationship("Incident", back_populates="suivis",
+                           foreign_keys="[SuiviIncident.idIncident]",
+                           primaryjoin="SuiviIncident.idIncident == Incident.id")

@@ -1,11 +1,6 @@
-"""
-Incident model — represents a cochlear implant incident reported by a patient.
-Conforms to IEC 62304 Class B software classification.
-"""
-
-import enum
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Date, Time, DateTime, Enum, Text, SmallInteger, ForeignKey
+import enum
+from sqlalchemy import Column, Integer, String, Date, Time, DateTime, Enum, SmallInteger
 from sqlalchemy.orm import relationship
 from app.database import Base
 
@@ -16,7 +11,7 @@ class GraviteEnum(str, enum.Enum):
     MAJEUR = "Majeur"
     CRITIQUE = "Critique"
 
-
+    
 class StatutEnum(str, enum.Enum):
     OUVERT = "Ouvert"
     EN_COURS = "EnCours"
@@ -34,19 +29,16 @@ class Incident(Base):
     description = Column(String(2000), nullable=False)
     statut = Column(Enum(StatutEnum), default=StatutEnum.OUVERT, nullable=False)
 
-    # Foreign keys
-    idPatient = Column(Integer, ForeignKey("patients.id"), nullable=False)
-    idImplant = Column(Integer, ForeignKey("implants.id"), nullable=True)
-    idProcesseur = Column(Integer, ForeignKey("processeurs.id"), nullable=True)
-    idMedecin = Column(Integer, ForeignKey("medecins.id"), nullable=True)
+    # Sans ForeignKey — juste les IDs stockés
+    idPatient = Column(Integer, nullable=False)
+    idImplant = Column(Integer, nullable=True)
+    idProcesseur = Column(Integer, nullable=True)
+    idMedecin = Column(Integer, nullable=True)
 
-    # Audit fields
+    # Audit
     dateCreation = Column(DateTime, default=datetime.utcnow, nullable=False)
     dateModification = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
-    deleted = Column(SmallInteger, default=0, nullable=False)  # 0=active, 1=soft-deleted
+    deleted = Column(SmallInteger, default=0, nullable=False)
 
-    # Relationships
+    # Relationship
     suivis = relationship("SuiviIncident", back_populates="incident", cascade="all, delete-orphan")
-
-    def __repr__(self):
-        return f"<Incident id={self.id} gravite={self.gravite} statut={self.statut}>"
